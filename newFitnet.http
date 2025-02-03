@@ -1,0 +1,6 @@
+@newFitnet_HostAddress = http://localhost:5117
+
+GET {{newFitnet_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
