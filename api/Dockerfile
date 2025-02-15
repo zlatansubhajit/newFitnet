@@ -12,10 +12,10 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["newFitnet.csproj", "."]
-RUN dotnet restore "./newFitnet.csproj"
+COPY ["api/newFitnet.csproj", "api/"]
+RUN dotnet restore "./api/newFitnet.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/api"
 RUN dotnet build "./newFitnet.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

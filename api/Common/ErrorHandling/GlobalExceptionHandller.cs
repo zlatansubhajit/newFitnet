@@ -4,7 +4,8 @@ using newFitnet.Common.BusinessRulesEngine;
 
 namespace newFitnet.Common.ErrorHandling
 {
-    internal sealed class GlobalExceptionHandller(ILogger<GlobalExceptionHandller> logger) : IExceptionHandler
+    internal sealed class GlobalExceptionHandller(ILogger<GlobalExceptionHandller> logger, IHostEnvironment host) 
+		: IExceptionHandler
     {
         private const string? ServerError = "Server Error";
         private const string ErrorOccurredMessage = "An Error Occurred.";
@@ -23,16 +24,24 @@ namespace newFitnet.Common.ErrorHandling
 					problemdetails = new ProblemDetails
 					{
 						Status = StatusCodes.Status409Conflict,
-						Title = businessRuleValidationException.Message
+						Title = businessRuleValidationException.Message,
 					};
+					if (host.IsDevelopment())
+					{
+						problemdetails.Detail = businessRuleValidationException.StackTrace;
+                    }
 					break;
 
 				default:
 					problemdetails = new ProblemDetails
 					{
 						Status = StatusCodes.Status500InternalServerError,
-						Title = ServerError
+						Title = ServerError,
 					};
+					if (host.IsDevelopment()) 
+					{
+						problemdetails.Detail = exception.ToString();
+                    }
 					break;
 			}
 
