@@ -1,0 +1,100 @@
+﻿@using newFitnet.Member.Data
+@model Member
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strong Gym</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+
+        .details {
+            margin-top: 20px;
+        }
+
+        .detail-row {
+            width: 100%;
+            margin-bottom: 10px;
+            overflow: hidden; /* Clearfix to contain floated elements */
+        }
+
+            .detail-row .label {
+                font-weight: bold;
+                width: 120px;
+                text-align: right;
+                padding-right: 10px;
+                color: #555;
+                float: left; /* Float label to the left */
+            }
+
+            .detail-row .value {
+                margin-left: 130px; /* Adjust margin to align with label width + padding */
+                color: #333;
+                display: block; /* Make sure it takes full width */
+            }
+
+        .date-time {
+            text-align: right;
+            font-size: 0.8em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="a4-page">
+        <div class="date-time">
+            Created on: @DateTime.Now.ToString("MMMM dd, yyyy HH:mm")
+        </div>
+        <div class="header">
+            <img src="./gymlogo.png" alt="Gym Logo" class="logo">
+            <h1>Welcome to Gym Family - @Model.Name</h1>
+        </div>
+        <div class="details">
+            <div class="detail-row">
+                <div class="label">Name:</div>
+                <div class="value">@Model.Name</div>
+            </div>
+            <div class="detail-row">
+                <div class="label">Phone:</div>
+                <div class="value">@Model.Phone</div>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Email))
+            {
+                <div class="detail-row">
+                    <div class="label">Email:</div>
+                    <div class="value">@Model.Email</div>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.Address))
+            {
+                <div class="detail-row">
+                    <div class="label">Address:</div>
+                    <div class="value">@Model.Address</div>
+                </div>
+            }
+        </div>
+    </div>
+</body>

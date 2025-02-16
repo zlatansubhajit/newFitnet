@@ -6,7 +6,8 @@ USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
-
+USER root
+RUN apt-get update && apt-get install -y --allow-unauthenticated apt-utils libc6-dev libxrender1 libfontconfig1 libgdiplus libjpeg62-turbo libfontconfig1 libfreetype6 libxext6 libx11-6 fontconfig zlib1g
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build

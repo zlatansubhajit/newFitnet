@@ -5,6 +5,10 @@ namespace newFitnet.Member
     using newFitnet.Member.Data.Database;
     using newFitnet.Member.Data;
     using Microsoft.EntityFrameworkCore;
+    using Razor.Templating.Core;
+    using DinkToPdf;
+    using DinkToPdf.Contracts;
+    using System;
 
     internal static class MembersEndpoint
     {
@@ -44,11 +48,29 @@ namespace newFitnet.Member
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status500InternalServerError);
 
+        internal static void MapRenderPdf(this IEndpointRouteBuilder app) =>
+            app.MapGet($"{MembersApiPaths.Delete}/pdf",
+                async (Guid MemberId, MembersPersistence membersPersistence,
+                    CancellationToken cancellationToken) =>
+                {
+                    var member = await membersPersistence.Members.SingleOrDefaultAsync(m => m.Id == MemberId);
+                    var html = await RazorTemplateEngine.RenderAsync("Member/DocTemplates/NewMemberDoc.cshtml", member);
+
+                    var converter = new BasicConverter(new PdfTools());
+                    var doc = new HtmlToPdfDocument()
+                    {
+                        Objects = { new ObjectSettings() { HtmlContent = html } }
+                    };
+                    byte[] pdf = converter.Convert(doc);
+
+                    return Results.File(pdf,"application/pdf","converted.pdf");
+                });
 
         internal static void MapMembers(this IEndpointRouteBuilder app)
         {
             app.MapCreateOrUpdateMember();
             app.MapListMembers();
+            app.MapRenderPdf();
         }
     }
 }
