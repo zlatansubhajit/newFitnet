@@ -9,9 +9,13 @@ namespace newFitnet.Member
     using DinkToPdf;
     using DinkToPdf.Contracts;
     using System;
+    using RazorHtmlEmails.RazorClassLib.Services;
+    using RazorHtmlEmails.RazorClassLib.Views.Emails.ConfirmAccount;
+    using newFitnet.Common.EmailService;
+    using Microsoft.Extensions.DependencyInjection;
 
     internal static class MembersEndpoint
-    {
+    {        
         internal static void MapCreateOrUpdateMember(this IEndpointRouteBuilder app) =>
             app.MapPost(MembersApiPaths.Root,
                 async (CreateOrUpdateMemberRequest request, MembersPersistence persistence,
@@ -66,11 +70,25 @@ namespace newFitnet.Member
                     return Results.File(pdf,"application/pdf","converted.pdf");
                 });
 
+        internal static void MapSendEmail(this IEndpointRouteBuilder app) =>
+            app.MapGet($"{MembersApiPaths.Delete}/email",
+                async (Guid MemberId, MembersPersistence memberPersistence, IEmailService emailService,
+                    CancellationToken cancellationToken, IRazorViewToStringRenderer razorViewToStringRenderer) => 
+                {
+                    var member = await memberPersistence.Members.SingleOrDefaultAsync(m => m.Id == MemberId);
+                    var confirmAccountModel = new ConfirmAccountEmailViewModel($"{member.Name??"NA"}/{Guid.NewGuid()}");
+                    string body = await razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ConfirmAccount/ConfirmAccountEmail.cshtml", confirmAccountModel);
+                    var toAddresses = new List<string> { "zlatansubhajit@gmail.com"};
+                    await emailService.SendEmail(toAddresses, "TEST", body);
+                    return Results.Ok("Sent");
+                });
+
         internal static void MapMembers(this IEndpointRouteBuilder app)
         {
             app.MapCreateOrUpdateMember();
             app.MapListMembers();
             app.MapRenderPdf();
+            app.MapSendEmail();
         }
     }
 }

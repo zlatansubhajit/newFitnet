@@ -1,6 +1,8 @@
+using newFitnet.Common.EmailService;
 using newFitnet.Common.ErrorHandling;
 using newFitnet.Member;
 using newFitnet.Pass;
+using RazorHtmlEmails.RazorClassLib.Services;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,11 +17,14 @@ builder.Services.AddExceptionHandling();
 
 builder.Services.AddMembers(builder.Configuration);
 builder.Services.AddPasses(builder.Configuration);
+builder.Services.AddSingleton<IEmailService,  EmailService>();
+builder.Services.AddMvcCore().AddRazorViewEngine();
+builder.Services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

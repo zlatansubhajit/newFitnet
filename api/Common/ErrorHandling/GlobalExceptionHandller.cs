@@ -26,7 +26,7 @@ namespace newFitnet.Common.ErrorHandling
 						Status = StatusCodes.Status409Conflict,
 						Title = businessRuleValidationException.Message,
 					};
-					if (host.IsDevelopment())
+					if (!host.IsProduction())
 					{
 						problemdetails.Detail = businessRuleValidationException.StackTrace;
                     }
@@ -38,7 +38,7 @@ namespace newFitnet.Common.ErrorHandling
 						Status = StatusCodes.Status500InternalServerError,
 						Title = ServerError,
 					};
-					if (host.IsDevelopment()) 
+					if (!host.IsProduction()) 
 					{
 						problemdetails.Detail = exception.ToString();
                     }

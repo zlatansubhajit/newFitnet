@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "newFitnet", "api\newFitnet.
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{53349625-4D44-4229-8C7C-8A5BE9684080}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorHtmlEmails.RazorClassLib", "RazorHtmlEmails.RazorClassLib\RazorHtmlEmails.RazorClassLib.csproj", "{0ADC6181-F3E3-475D-B974-06283F68C14D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{53349625-4D44-4229-8C7C-8A5BE9684080}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53349625-4D44-4229-8C7C-8A5BE9684080}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53349625-4D44-4229-8C7C-8A5BE9684080}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ADC6181-F3E3-475D-B974-06283F68C14D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ADC6181-F3E3-475D-B974-06283F68C14D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ADC6181-F3E3-475D-B974-06283F68C14D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ADC6181-F3E3-475D-B974-06283F68C14D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
