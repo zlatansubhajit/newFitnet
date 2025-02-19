@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # local volume for container data
 .containers/
+/api/appsettings.local.json
