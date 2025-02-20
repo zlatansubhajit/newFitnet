@@ -1,5 +1,7 @@
+using newFitnet.Common.Clock;
 using newFitnet.Common.EmailService;
 using newFitnet.Common.ErrorHandling;
+using newFitnet.Common.Events.EventBus;
 using newFitnet.Member;
 using newFitnet.Pass;
 using RazorHtmlEmails.RazorClassLib.Services;
@@ -14,12 +16,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddJsonOptions(options => 
 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddExceptionHandling();
+builder.Services.AddClock();
+builder.Services.AddEventBus();
 
 builder.Services.AddMembers(builder.Configuration);
 builder.Services.AddPasses(builder.Configuration);
 builder.Services.AddSingleton<IEmailService,  EmailService>();
 builder.Services.AddMvcCore().AddRazorViewEngine();
 builder.Services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
+builder.Services.AddSingleton<INewRazorViewString, NewRazorViewString>();
 
 var app = builder.Build();
 

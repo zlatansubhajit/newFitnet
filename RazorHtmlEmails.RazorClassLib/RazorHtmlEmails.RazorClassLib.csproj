@@ -7,7 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\Shared\gymlogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Shared\gymlogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Razor.Templating.Core" Version="2.1.0" />
   </ItemGroup>
   
 </Project>

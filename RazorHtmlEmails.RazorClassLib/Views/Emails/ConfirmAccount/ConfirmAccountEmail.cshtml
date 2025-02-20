@@ -7,12 +7,37 @@
 }
 
 <p>
-    We're excited to have you get started. First, you need to confirm your account. Just press the button below.
+    We're excited to have you get started. First, you need to confirm your below account details. Just press the button below.
 </p>
+
+<div class="details">
+    <div class="detail-row">
+        <div class="label">Name:</div>
+        <div class="value">@Model.Name</div>
+    </div>
+    <div class="detail-row">
+        <div class="label">Phone:</div>
+        <div class="value">@Model.Phone</div>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.Email))
+    {
+        <div class="detail-row">
+            <div class="label">Email:</div>
+            <div class="value">@Model.Email</div>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.Address))
+    {
+        <div class="detail-row">
+            <div class="label">Address:</div>
+            <div class="value">@Model.Address</div>
+        </div>
+    }
+</div>
 
 <br />
 
-@await Html.PartialAsync("EmailButton", new EmailButtonViewModel("Confirm Account", Model.ConfirmEmailUrl))
+@await Html.PartialAsync("EmailButton", new EmailButtonViewModel("Confirm Details", Model.ConfirmEmailUrl))
 
 <br />
 
@@ -23,5 +48,5 @@
 <br />
 
 <p>
-    The Contoso Team
+    The Poewer Gym Team
 </p>

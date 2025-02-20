@@ -24,6 +24,7 @@
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="DinkToPdfCopyDependencies" Version="1.0.8" />
     <PackageReference Include="MailKit" Version="4.10.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
