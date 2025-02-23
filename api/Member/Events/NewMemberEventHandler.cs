@@ -19,7 +19,7 @@ namespace newFitnet.Member.Events
             //string body = await razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ConfirmAccount/ConfirmAccountEmail.cshtml", confirmAccountModel);
             string body = await newRazorViewString.GetStringFromRazor("/Views/Emails/ConfirmAccount/ConfirmAccountEmail.cshtml", confirmAccountModel);
             var toAddresses = new List<string> { "zlatansubhajit@gmail.com" };
-            await emailService.SendEmail(toAddresses, "TEST", body);
+            emailService.SendEmail(toAddresses, "TEST", body);
         }
     }
 }

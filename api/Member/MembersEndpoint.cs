@@ -15,6 +15,7 @@ namespace newFitnet.Member
     using Microsoft.Extensions.DependencyInjection;
     using newFitnet.Member.Events;
     using newFitnet.Common.Events.EventBus;
+    using Microsoft.Extensions.Logging;
 
     internal static class MembersEndpoint
     {        
@@ -66,10 +67,15 @@ namespace newFitnet.Member
         internal static void MapRenderPdf(this IEndpointRouteBuilder app) =>
             app.MapGet($"{MembersApiPaths.Delete}/pdf",
                 async (Guid MemberId, MembersPersistence membersPersistence,
-                    CancellationToken cancellationToken) =>
+                    CancellationToken cancellationToken, INewRazorViewString newRazorViewString) =>
                 {
                     var member = await membersPersistence.Members.SingleOrDefaultAsync(m => m.Id == MemberId);
-                    var html = await RazorTemplateEngine.RenderAsync("Member/DocTemplates/NewMemberDoc.cshtml", member);
+                    //var html = await RazorTemplateEngine.RenderAsync("Member/DocTemplates/NewMemberDoc.cshtml", member);
+
+                    var confirmAccountModel = new ConfirmAccountEmailViewModel($"{member.Name ?? "NA"}/{Guid.NewGuid()}",
+                        member.Name, member.Phone, member.Email, member.Address);
+                    //string body = await razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ConfirmAccount/ConfirmAccountEmail.cshtml", confirmAccountModel);
+                    string html = await newRazorViewString.GetStringFromRazor("/Views/Emails/ConfirmAccount/ConfirmAccountEmail.cshtml", confirmAccountModel);
 
                     var converter = new BasicConverter(new PdfTools());
                     var doc = new HtmlToPdfDocument()
