@@ -1,3 +1,6 @@
+using Gotenberg.Sharp.API.Client.Domain.Settings;
+using Gotenberg.Sharp.API.Client;
+using Microsoft.Extensions.Configuration;
 using newFitnet.Common.Clock;
 using newFitnet.Common.EmailService;
 using newFitnet.Common.ErrorHandling;
@@ -6,6 +9,7 @@ using newFitnet.Member;
 using newFitnet.Pass;
 using RazorHtmlEmails.RazorClassLib.Services;
 using System.Text.Json.Serialization;
+using Gotenberg.Sharp.API.Client.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,9 @@ builder.Services.AddSingleton<IEmailService,  EmailService>();
 builder.Services.AddMvcCore().AddRazorViewEngine();
 builder.Services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
 builder.Services.AddSingleton<INewRazorViewString, NewRazorViewString>();
+builder.Services.AddOptions<GotenbergSharpClientOptions>()
+            .Bind(builder.Configuration.GetSection(nameof(GotenbergSharpClient)));
+builder.Services.AddGotenbergSharpClient();
 
 var app = builder.Build();
 

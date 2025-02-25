@@ -16,6 +16,10 @@ namespace newFitnet.Member
     using newFitnet.Member.Events;
     using newFitnet.Common.Events.EventBus;
     using Microsoft.Extensions.Logging;
+    using Gotenberg.Sharp.API.Client;
+    using Microsoft.AspNetCore.Mvc;
+    using Gotenberg.Sharp.API.Client.Domain.Builders;
+    using Gotenberg.Sharp.API.Client.Domain.Builders.Faceted;
 
     internal static class MembersEndpoint
     {        
@@ -67,7 +71,8 @@ namespace newFitnet.Member
         internal static void MapRenderPdf(this IEndpointRouteBuilder app) =>
             app.MapGet($"{MembersApiPaths.Delete}/pdf",
                 async (Guid MemberId, MembersPersistence membersPersistence,
-                    CancellationToken cancellationToken, INewRazorViewString newRazorViewString) =>
+                    CancellationToken cancellationToken, INewRazorViewString newRazorViewString,
+                    [FromServices] GotenbergSharpClient sharpClient) =>
                 {
                     var member = await membersPersistence.Members.SingleOrDefaultAsync(m => m.Id == MemberId);
                     //var html = await RazorTemplateEngine.RenderAsync("Member/DocTemplates/NewMemberDoc.cshtml", member);
@@ -77,14 +82,28 @@ namespace newFitnet.Member
                     //string body = await razorViewToStringRenderer.RenderViewToStringAsync("/Views/Emails/ConfirmAccount/ConfirmAccountEmail.cshtml", confirmAccountModel);
                     string html = await newRazorViewString.GetStringFromRazor("/Views/Emails/ConfirmAccount/ConfirmAccountEmail.cshtml", confirmAccountModel);
 
-                    var converter = new BasicConverter(new PdfTools());
-                    var doc = new HtmlToPdfDocument()
-                    {
-                        Objects = { new ObjectSettings() { HtmlContent = html } }
-                    };
-                    byte[] pdf = converter.Convert(doc);
+                    //var converter = new BasicConverter(new PdfTools());
+                    //var doc = new HtmlToPdfDocument()
+                    //{
+                    //    Objects = { new ObjectSettings() { HtmlContent = html } }
+                    //};
+                    //byte[] pdf = converter.Convert(doc);
 
-                    return Results.File(pdf,"application/pdf","converted.pdf");
+                    var builder = new HtmlRequestBuilder()
+                     .AddDocument(doc =>
+                         doc.SetBody(html)
+                     ).WithPageProperties(pp =>
+                     {
+                         pp.SetPaperSize(PaperSizes.A3)
+                             .SetMargins(Margins.None)
+                             .SetScale(.99);
+                     });
+
+                    var req = await builder.BuildAsync();
+
+                    var result = await sharpClient.HtmlToPdfAsync(req);
+
+                    return Results.File(result, "application/pdf","converted.pdf");
                 });
 
         internal static void MapSendEmail(this IEndpointRouteBuilder app) =>
